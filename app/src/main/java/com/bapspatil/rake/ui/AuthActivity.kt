@@ -36,8 +36,8 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
         job = Job()
 
         auth = FirebaseAuth.getInstance()
-        if(auth.currentUser != null) {
-            startActivity<MainActivity>()
+        if (auth.currentUser != null) {
+            startActivity<PickerActivity>()
         } else {
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -60,7 +60,7 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
 
             // Successfully signed in
             if (resultCode == Activity.RESULT_OK) {
-                startActivity<MainActivity>()
+                startActivity<PickerActivity>()
                 finish()
             } else {
                 // Sign in failed
@@ -79,6 +79,7 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
             }
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()

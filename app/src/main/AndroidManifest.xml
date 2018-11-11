@@ -31,7 +31,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Main"></activity>
 
-        <activity android:name=".ui.ResultActivity"
+        <activity android:name=".ui.PickerActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Result">
@@ -48,7 +48,7 @@
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="ocr,label" />
+            android:value="ocr,label,barcode" />
 
     </application>
 

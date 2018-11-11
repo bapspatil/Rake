@@ -9,6 +9,7 @@
         android:id="@+id/textItemTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoLink="all"
         android:textSize="20sp"
         android:textColor="@color/colorPrimaryDark"
         android:paddingBottom="24dp"

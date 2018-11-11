@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.wonderkiln:camerakit:0.13.2'
-
+    implementation 'com.ramotion.cardslider:card-slider:0.3.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
