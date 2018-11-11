@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.bapspatil.rake.R
-import com.google.firebase.ml.vision.label.FirebaseVisionLabel
+import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabel
 import kotlinx.android.synthetic.main.item_text.view.*
 
 /*
 ** Created by Bapusaheb Patil {@link https://bapspatil.com}
 */
 
-class ImageResultAdapter(private val mContext: Context, private val mLabels: List<FirebaseVisionLabel>) : RecyclerView.Adapter<ImageResultAdapter.TextViewHolder>() {
+class ImageResultAdapter(private val mContext: Context, private val mLabels: List<FirebaseVisionCloudLabel>) : RecyclerView.Adapter<ImageResultAdapter.TextViewHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): TextViewHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.item_text, p0, false)

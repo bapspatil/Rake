@@ -18,9 +18,9 @@ import com.bapspatil.rake.util.Constants
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
+import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions
+import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabel
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.label.FirebaseVisionLabel
-import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetectorOptions
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.wonderkiln.camerakit.*
 import kotlinx.coroutines.CoroutineScope
@@ -91,18 +91,39 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun labelImage(image: FirebaseVisionImage) {
-        val options = FirebaseVisionLabelDetectorOptions.Builder()
-                .setConfidenceThreshold(0.6f)
-                .build()
-        val detector = FirebaseVision.getInstance()
-                .getVisionLabelDetector(options)
-        detector.detectInImage(image)
-                .addOnSuccessListener { labels ->
+//        val options = FirebaseVisionLabelDetectorOptions.Builder()
+//                .setConfidenceThreshold(0.5f)
+//                .build()
+//        val detector = FirebaseVision.getInstance()
+//                .getVisionLabelDetector(options)
+//        detector.detectInImage(image)
+//                .addOnSuccessListener { labels ->
 //                    for (label in labels) {
 //                        val text = label.label
 //                        val entityId = label.entityId
 //                        val confidence = label.confidence
 //                    }
+//                    updateUIForImageLabeling(labels)
+//                }
+//                .addOnFailureListener{ exception ->
+//                    Log.d("BARCODE_SCAN", exception.toString())
+//                }
+//                .addOnCompleteListener {
+//                    longToast("Image labeling done!")
+//                }
+        val options = FirebaseVisionCloudDetectorOptions.Builder()
+                .setMaxResults(15)
+                .setModelType(FirebaseVisionCloudDetectorOptions.LATEST_MODEL)
+                .build()
+        val detector = FirebaseVision.getInstance()
+                .getVisionCloudLabelDetector(options)
+        detector.detectInImage(image)
+                .addOnSuccessListener { labels ->
+                    for (label in labels) {
+                        val text = label.label
+                        val entityId = label.entityId
+                        val confidence = label.confidence
+                    }
                     updateUIForImageLabeling(labels)
                 }
                 .addOnFailureListener{ exception ->
@@ -113,7 +134,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 }
     }
 
-    private fun updateUIForImageLabeling(labels: List<FirebaseVisionLabel>) {
+    private fun updateUIForImageLabeling(labels: List<FirebaseVisionCloudLabel>) {
         imageResultAdapter = ImageResultAdapter(this@MainActivity, labels)
         binding.resultRecyclerView.adapter = imageResultAdapter
         binding.placeholderTextView.visibility = View.GONE
