@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-
 /*
 ** Created by Bapusaheb Patil {@link https://bapspatil.com}
 */
@@ -15,7 +14,7 @@ class RakeFirebaseMessagingService : FirebaseMessagingService() {
 
         // Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG,"From: " + remoteMessage!!.from!!)
+        Log.d(TAG, "From: " + remoteMessage!!.from!!)
 
         // Check if message contains a data payload.
         if (remoteMessage.data.isNotEmpty()) {
@@ -28,7 +27,6 @@ class RakeFirebaseMessagingService : FirebaseMessagingService() {
                 // Handle message within 10 seconds
                 // handleNow()
             }
-
         }
 
         // Check if message contains a notification payload.

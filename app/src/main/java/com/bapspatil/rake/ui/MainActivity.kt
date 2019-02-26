@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     }
                     updateUIForImageLabeling(labels)
                 }
-                .addOnFailureListener{ exception ->
+                .addOnFailureListener { exception ->
                     Log.d("BARCODE_SCAN", exception.toString())
                 }
                 .addOnCompleteListener {
