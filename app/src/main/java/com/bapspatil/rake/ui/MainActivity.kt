@@ -18,9 +18,9 @@ import com.bapspatil.rake.util.Constants
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
-import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions
-import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabel
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.label.FirebaseVisionCloudImageLabelerOptions
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.wonderkiln.camerakit.*
 import kotlinx.coroutines.CoroutineScope
@@ -28,9 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.longToast
 import kotlin.coroutines.CoroutineContext
-
-
-
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var binding: ActivityMainBinding
@@ -111,16 +108,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 //                .addOnCompleteListener {
 //                    longToast("Image labeling done!")
 //                }
-        val options = FirebaseVisionCloudDetectorOptions.Builder()
-                .setMaxResults(15)
-                .setModelType(FirebaseVisionCloudDetectorOptions.LATEST_MODEL)
+        val options = FirebaseVisionCloudImageLabelerOptions.Builder()
+                .setConfidenceThreshold(0.6f)
                 .build()
         val detector = FirebaseVision.getInstance()
-                .getVisionCloudLabelDetector(options)
-        detector.detectInImage(image)
+                .getCloudImageLabeler(options)
+        detector.processImage(image)
                 .addOnSuccessListener { labels ->
                     for (label in labels) {
-                        val text = label.label
+                        val text = label.text
                         val entityId = label.entityId
                         val confidence = label.confidence
                     }
@@ -134,7 +130,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 }
     }
 
-    private fun updateUIForImageLabeling(labels: List<FirebaseVisionCloudLabel>) {
+    private fun updateUIForImageLabeling(labels: List<FirebaseVisionImageLabel>) {
         imageResultAdapter = ImageResultAdapter(this@MainActivity, labels)
         binding.resultRecyclerView.adapter = imageResultAdapter
         binding.placeholderTextView.visibility = View.GONE
