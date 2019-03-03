@@ -4,6 +4,9 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.bapspatil.rake.R
 import com.bapspatil.rake.databinding.ActivityPickerBinding
 import com.bapspatil.rake.util.Constants

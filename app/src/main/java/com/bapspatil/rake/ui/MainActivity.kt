@@ -1,20 +1,20 @@
 package com.bapspatil.rake.ui
 
 import android.annotation.SuppressLint
-import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
+import androidx.databinding.DataBindingUtil
 import com.bapspatil.rake.R
 import com.bapspatil.rake.adapter.BarcodeResultAdapter
 import com.bapspatil.rake.adapter.ImageResultAdapter
 import com.bapspatil.rake.adapter.TextResultAdapter
 import com.bapspatil.rake.databinding.ActivityMainBinding
 import com.bapspatil.rake.util.Constants
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions

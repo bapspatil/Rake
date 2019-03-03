@@ -3,9 +3,10 @@ package com.bapspatil.rake.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.bapspatil.rake.BuildConfig
 import com.bapspatil.rake.R
+import com.bapspatil.rake.util.Constants
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import java.util.*
@@ -59,7 +61,12 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
 
             // Successfully signed in
             if (resultCode == Activity.RESULT_OK) {
-                startActivity<PickerActivity>()
+                val isFirstLaunch = defaultSharedPreferences.getBoolean(Constants.KEY_PREFERENCE_FIRST_LAUNCH, true)
+                if (isFirstLaunch) {
+                    startActivity<IntroActivity>()
+                } else {
+                    startActivity<PickerActivity>()
+                }
                 finish()
             } else {
                 // Sign in failed
