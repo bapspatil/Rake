@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Rake</string>
     <string name="privacy_policy"><a href="https://github.com/bapspatil/privacy/blob/master/Rake-Privacy-Policy.md">Privacy Policy</a></string>
+
+    <string name="scanning_image">Scanning image…</string>
+    <string name="getting_your_details">Getting your details…</string>
 </resources>

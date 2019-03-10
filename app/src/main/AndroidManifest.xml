@@ -35,7 +35,9 @@
             android:name=".ui.CameraActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Main" />
+            android:theme="@style/AppTheme.Main"
+            android:parentActivityName=".ui.PickerActivity">
+        </activity>
         <activity
             android:name=".ui.PickerActivity"
             android:launchMode="singleTop"

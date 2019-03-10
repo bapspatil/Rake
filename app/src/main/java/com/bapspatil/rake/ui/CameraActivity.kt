@@ -1,11 +1,13 @@
 package com.bapspatil.rake.ui
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import com.bapspatil.rake.R
@@ -40,6 +42,9 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var textResultAdapter: TextResultAdapter
     private lateinit var barcodeResultAdapter: BarcodeResultAdapter
     private lateinit var imageResultAdapter: ImageResultAdapter
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,21 +55,21 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
 
         binding.apply {
             cameraView.addCameraKitListener(object : CameraKitEventListener {
-                override fun onEvent(p0: CameraKitEvent?) {
+                override fun onEvent(event: CameraKitEvent?) {
                     // Not implemented
                 }
 
-                override fun onError(p0: CameraKitError?) {
+                override fun onError(error: CameraKitError?) {
                     // Not implemented
                 }
 
-                override fun onVideo(p0: CameraKitVideo?) {
+                override fun onVideo(video: CameraKitVideo?) {
                     // Not implemented
                 }
 
-                override fun onImage(p0: CameraKitImage?) {
-                    showPreview(p0)
-                    bitmap = p0!!.bitmap
+                override fun onImage(image: CameraKitImage?) {
+                    showPreview(image)
+                    bitmap = image!!.bitmap
                 }
             })
 
@@ -72,6 +77,14 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 if (previewImageView.visibility == View.GONE) {
                     cameraView.captureImage()
                 } else {
+                    if(!progressDialog.isShowing) {
+                        progressDialog.setCanceledOnTouchOutside(false)
+                        progressDialog.setMessage(getString(R.string.scanning_image))
+                        progressDialog.setOnCancelListener {
+                            NavUtils.navigateUpFromSameTask(this@CameraActivity)
+                        }
+                        progressDialog.show()
+                    }
                     val image = FirebaseVisionImage.fromBitmap(bitmap)
                     when (intent.getStringExtra(Constants.KEY_FUNCTION)) {
                         Constants.VALUE_RECOGNIZE_TEXT -> recognizeText(image)
@@ -127,6 +140,8 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 }
                 .addOnCompleteListener {
                     longToast("Image labeling done!")
+                    if(progressDialog.isShowing)
+                        progressDialog.hide()
                 }
     }
 
@@ -175,6 +190,8 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 }
                 .addOnCompleteListener {
                     longToast("Barcode scan done!")
+                    if(progressDialog.isShowing)
+                        progressDialog.hide()
                 }
     }
 
@@ -215,6 +232,10 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 }
                 .addOnFailureListener { exception ->
                     Log.d("TEXT_RECOGNITION", exception.toString())
+                }
+                .addOnCompleteListener {
+                    if(progressDialog.isShowing)
+                        progressDialog.hide()
                 }
     }
 
