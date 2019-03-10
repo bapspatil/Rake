@@ -7,7 +7,4 @@ import android.app.Application
 */
 
 class RakeApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

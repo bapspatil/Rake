@@ -2,9 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.CameraActivity">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayoutRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -34,7 +34,7 @@
             </FrameLayout>
         </RelativeLayout>
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/bottomSheet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,7 +43,7 @@
             app:behavior_skipCollapsed="false"
             app:layout_behavior="@string/bottom_sheet_behavior">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/resultCardView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -63,17 +63,17 @@
                     android:gravity="center"
                     android:text="Go ahead. Take a pic to see the results here!" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/resultRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbarThumbVertical="@color/colorPrimary"
                     android:scrollbars="vertical"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-            </android.support.v7.widget.CardView>
-        </android.support.v4.widget.NestedScrollView>
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </androidx.cardview.widget.CardView>
+        </androidx.core.widget.NestedScrollView>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/retryFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             app:layout_anchor="@id/relativeLayoutContainer"
             app:layout_anchorGravity="end|bottom" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/captureFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,5 +94,5 @@
             app:fabSize="normal"
             app:layout_anchor="@id/relativeLayoutContainer"
             app:layout_anchorGravity="bottom|center_horizontal" />
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

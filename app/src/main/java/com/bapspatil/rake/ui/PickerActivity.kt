@@ -1,9 +1,6 @@
 package com.bapspatil.rake.ui
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -30,13 +27,13 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
 
         binding.apply {
             recognizeTextCardView.setOnClickListener {
-                startActivity<MainActivity>(Constants.KEY_FUNCTION to Constants.VALUE_RECOGNIZE_TEXT)
+                startActivity<CameraActivity>(Constants.KEY_FUNCTION to Constants.VALUE_RECOGNIZE_TEXT)
             }
             scanBarcodeCardView.setOnClickListener {
-                startActivity<MainActivity>(Constants.KEY_FUNCTION to Constants.VALUE_SCAN_BARCODE)
+                startActivity<CameraActivity>(Constants.KEY_FUNCTION to Constants.VALUE_SCAN_BARCODE)
             }
             labelImageCardView.setOnClickListener {
-                startActivity<MainActivity>(Constants.KEY_FUNCTION to Constants.VALUE_LABEL_IMAGE)
+                startActivity<CameraActivity>(Constants.KEY_FUNCTION to Constants.VALUE_LABEL_IMAGE)
             }
         }
     }

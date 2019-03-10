@@ -1,7 +1,6 @@
 package com.bapspatil.rake.ui
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat.startActivity
 import com.bapspatil.rake.R
 import com.bapspatil.rake.util.Constants
 import com.heinrichreimersoftware.materialintro.app.IntroActivity
@@ -13,6 +12,8 @@ class IntroActivity : IntroActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        buttonNextFunction = BUTTON_NEXT_FUNCTION_NEXT
 
         addSlide(SimpleSlide.Builder()
                 .title("Rake")
@@ -51,11 +52,13 @@ class IntroActivity : IntroActivity() {
                 .description("Please read the " + R.string.privacy_policy + " before proceeding further.")
                 .background(R.color.white)
                 .image(R.drawable.privacy)
+                .buttonCtaLabel("AGREE")
+                .buttonCtaClickListener {
+                    defaultSharedPreferences.edit().putBoolean(Constants.KEY_PREFERENCE_FIRST_LAUNCH, false).apply()
+                    startActivity<PickerActivity>()
+                    finish()
+                }
                 .build()
         )
-
-        defaultSharedPreferences.edit().putBoolean(Constants.KEY_PREFERENCE_FIRST_LAUNCH, false).apply()
-        startActivity<PickerActivity>()
-        finish()
     }
 }

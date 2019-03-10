@@ -29,7 +29,7 @@ import kotlinx.coroutines.Job
 import org.jetbrains.anko.longToast
 import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity(), CoroutineScope {
+class CameraActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var binding: ActivityMainBinding
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun updateUIForImageLabeling(labels: List<FirebaseVisionImageLabel>) {
-        imageResultAdapter = ImageResultAdapter(this@MainActivity, labels)
+        imageResultAdapter = ImageResultAdapter(this@CameraActivity, labels)
         binding.resultRecyclerView.adapter = imageResultAdapter
         binding.placeholderTextView.visibility = View.GONE
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun updateUIForBarcodeScan(barcode: FirebaseVisionBarcode) {
-        barcodeResultAdapter = BarcodeResultAdapter(this@MainActivity, barcode)
+        barcodeResultAdapter = BarcodeResultAdapter(this@CameraActivity, barcode)
         binding.resultRecyclerView.adapter = barcodeResultAdapter
         binding.placeholderTextView.visibility = View.GONE
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun updateUIForTextRecognition(firebaseVisionText: FirebaseVisionText) {
-        textResultAdapter = TextResultAdapter(this@MainActivity, firebaseVisionText.textBlocks)
+        textResultAdapter = TextResultAdapter(this@CameraActivity, firebaseVisionText.textBlocks)
         binding.resultRecyclerView.adapter = textResultAdapter
         binding.placeholderTextView.visibility = View.GONE
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
