@@ -14,9 +14,13 @@ import com.bapspatil.rake.R
 import com.bapspatil.rake.adapter.BarcodeResultAdapter
 import com.bapspatil.rake.adapter.ImageResultAdapter
 import com.bapspatil.rake.adapter.TextResultAdapter
-import com.bapspatil.rake.databinding.ActivityMainBinding
+import com.bapspatil.rake.databinding.ActivityCameraBinding
+import com.bapspatil.rake.util.CommonUtils.base64
+import com.bapspatil.rake.util.CommonUtils.resize
 import com.bapspatil.rake.util.Constants
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
@@ -31,25 +35,34 @@ import kotlinx.coroutines.Job
 import org.jetbrains.anko.longToast
 import kotlin.coroutines.CoroutineContext
 
+@SuppressLint("RestrictedApi")
 class CameraActivity : AppCompatActivity(), CoroutineScope {
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityCameraBinding
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+        get() = job + Dispatchers.Main
 
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(this)
+    }
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<NestedScrollView>
+
     private lateinit var bitmap: Bitmap
     private lateinit var textResultAdapter: TextResultAdapter
     private lateinit var barcodeResultAdapter: BarcodeResultAdapter
     private lateinit var imageResultAdapter: ImageResultAdapter
-    private val progressDialog: ProgressDialog by lazy {
-        ProgressDialog(this)
-    }
+    private lateinit var firestoreDb: FirebaseFirestore
+    private var userUid: String? = null
+    private lateinit var keyFunction: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_camera)
         job = Job()
+        firestoreDb = FirebaseFirestore.getInstance()
+        userUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        keyFunction = intent.getStringExtra(Constants.KEY_FUNCTION)
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
 
@@ -77,7 +90,7 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 if (previewImageView.visibility == View.GONE) {
                     cameraView.captureImage()
                 } else {
-                    if(!progressDialog.isShowing) {
+                    if (!progressDialog.isShowing) {
                         progressDialog.setCanceledOnTouchOutside(false)
                         progressDialog.setMessage(getString(R.string.scanning_image))
                         progressDialog.setOnCancelListener {
@@ -86,7 +99,7 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                         progressDialog.show()
                     }
                     val image = FirebaseVisionImage.fromBitmap(bitmap)
-                    when (intent.getStringExtra(Constants.KEY_FUNCTION)) {
+                    when (keyFunction) {
                         Constants.VALUE_RECOGNIZE_TEXT -> recognizeText(image)
                         Constants.VALUE_SCAN_BARCODE -> scanBarcode(image)
                         Constants.VALUE_LABEL_IMAGE -> labelImage(image)
@@ -97,30 +110,66 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
             retryFab.setOnClickListener {
                 hidePreview()
             }
+
+            saveToFirestoreFab.setOnClickListener {
+                // TODO: Save to Firestore here.
+                when (keyFunction) {
+                    Constants.VALUE_LABEL_IMAGE -> {
+                        saveLabelledImageToFirestore()
+                    }
+                    Constants.VALUE_SCAN_BARCODE -> {
+                        saveScannedBarcodeToFirestore()
+                    }
+                    Constants.VALUE_RECOGNIZE_TEXT -> {
+                        saveRecognizedTextToFirestore()
+                    }
+                }
+            }
         }
     }
 
+    private fun saveRecognizedTextToFirestore() {
+
+    }
+
+    private fun saveScannedBarcodeToFirestore() {
+
+    }
+
+    private fun saveLabelledImageToFirestore() {
+        // TODO: Use Firebase Storage to store images instead
+        progressDialog.show()
+        progressDialog.setMessage("Saving data to the cloud...")
+        val base64OfImage = bitmap.resize(bitmap.width / 3, bitmap.height / 3).base64()
+        val imageHeight = bitmap.height
+        val imageWidth = bitmap.width
+        val labels = imageResultAdapter.getLabels()
+
+        val labelledImageMap = hashMapOf(
+                Constants.KEY_FIRESTORE_LI_IMAGE_FILE to base64OfImage,
+                Constants.KEY_FIRESTORE_LI_IMAGE_HEIGHT to imageHeight,
+                Constants.KEY_FIRESTORE_LI_IMAGE_WIDTH to imageWidth,
+                Constants.KEY_FIRESTORE_LI_LABELS to labels
+        )
+
+        val labelledImageDoc = firestoreDb.collection(Constants.KEY_FIRESTORE_USERS)
+                .document(userUid!!)
+                .collection(Constants.KEY_FIRESTORE_USER_LABELLED_IMAGES)
+                .document()
+        firestoreDb.runTransaction { transaction ->
+            transaction.set(labelledImageDoc, labelledImageMap)
+        }
+                .addOnFailureListener { e ->
+                    longToast(e.message.toString())
+                    progressDialog.hide()
+                }
+                .addOnSuccessListener {
+                    longToast("SUCCESS!")
+                    progressDialog.hide()
+                }
+    }
+
     private fun labelImage(image: FirebaseVisionImage) {
-//        val options = FirebaseVisionLabelDetectorOptions.Builder()
-//                .setConfidenceThreshold(0.5f)
-//                .build()
-//        val detector = FirebaseVision.getInstance()
-//                .getVisionLabelDetector(options)
-//        detector.detectInImage(image)
-//                .addOnSuccessListener { labels ->
-//                    for (label in labels) {
-//                        val text = label.label
-//                        val entityId = label.entityId
-//                        val confidence = label.confidence
-//                    }
-//                    updateUIForImageLabeling(labels)
-//                }
-//                .addOnFailureListener{ exception ->
-//                    Log.d("BARCODE_SCAN", exception.toString())
-//                }
-//                .addOnCompleteListener {
-//                    longToast("Image labeling done!")
-//                }
         val options = FirebaseVisionCloudImageLabelerOptions.Builder()
                 .setConfidenceThreshold(0.6f)
                 .build()
@@ -129,19 +178,19 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         detector.processImage(image)
                 .addOnSuccessListener { labels ->
                     for (label in labels) {
-                        val text = label.text
-                        val entityId = label.entityId
-                        val confidence = label.confidence
+//                        val text = label.text
+//                        val entityId = label.entityId
+//                        val confidence = label.confidence
                     }
                     updateUIForImageLabeling(labels)
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("BARCODE_SCAN", exception.toString())
+                    Log.d("IMAGE_LABELLING", exception.toString())
                 }
                 .addOnCompleteListener {
-                    longToast("Image labeling done!")
-                    if(progressDialog.isShowing)
+                    if (progressDialog.isShowing)
                         progressDialog.hide()
+                    binding.saveToFirestoreFab.visibility = View.VISIBLE
                 }
     }
 
@@ -190,8 +239,9 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 }
                 .addOnCompleteListener {
                     longToast("Barcode scan done!")
-                    if(progressDialog.isShowing)
+                    if (progressDialog.isShowing)
                         progressDialog.hide()
+                    binding.saveToFirestoreFab.visibility = View.VISIBLE
                 }
     }
 
@@ -234,8 +284,9 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                     Log.d("TEXT_RECOGNITION", exception.toString())
                 }
                 .addOnCompleteListener {
-                    if(progressDialog.isShowing)
+                    if (progressDialog.isShowing)
                         progressDialog.hide()
+                    binding.saveToFirestoreFab.visibility = View.VISIBLE
                 }
     }
 
@@ -246,7 +297,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    @SuppressLint("RestrictedApi")
     private fun hidePreview() {
         binding.apply {
             cameraView.visibility = View.VISIBLE
@@ -256,11 +306,11 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
             }
             captureFab.setImageResource(R.drawable.ic_camera_white_24dp)
             retryFab.visibility = View.GONE
+            saveToFirestoreFab.visibility = View.GONE
         }
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    @SuppressLint("RestrictedApi")
     private fun showPreview(cameraKitImage: CameraKitImage?) {
         binding.apply {
             cameraView.visibility = View.GONE

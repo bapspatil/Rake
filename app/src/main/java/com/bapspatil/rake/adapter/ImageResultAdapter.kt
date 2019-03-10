@@ -33,4 +33,12 @@ class ImageResultAdapter(private val mContext: Context, private val mLabels: Lis
     inner class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textResultTextView: TextView = itemView.textItemTextView
     }
+
+    fun getLabels(): ArrayList<String> {
+        val mStringLabels = arrayListOf<String>()
+        mLabels.forEach { label ->
+            mStringLabels.add(label.text)
+        }
+        return mStringLabels
+    }
 }

@@ -1,6 +1,7 @@
 package com.bapspatil.rake.ui
 
 import android.os.Bundle
+import android.text.Html
 import com.bapspatil.rake.R
 import com.bapspatil.rake.util.Constants
 import com.heinrichreimersoftware.materialintro.app.IntroActivity
@@ -48,11 +49,11 @@ class IntroActivity : IntroActivity() {
         )
 
         addSlide(SimpleSlide.Builder()
-                .title("Privacy Policy")
-                .description("Please read the " + R.string.privacy_policy + " before proceeding further.")
+                .title("Let's talk about your privacy.")
+                .description("Please read and agree to the\n" + Html.fromHtml(getString(R.string.privacy_policy)) + " before proceeding further.")
                 .background(R.color.white)
                 .image(R.drawable.privacy)
-                .buttonCtaLabel("AGREE")
+                .buttonCtaLabel("I AGREE")
                 .buttonCtaClickListener {
                     defaultSharedPreferences.edit().putBoolean(Constants.KEY_PREFERENCE_FIRST_LAUNCH, false).apply()
                     startActivity<PickerActivity>()
