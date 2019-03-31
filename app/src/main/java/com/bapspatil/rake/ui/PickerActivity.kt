@@ -3,6 +3,7 @@ package com.bapspatil.rake.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.databinding.DataBindingUtil
 import com.bapspatil.rake.R
 import com.bapspatil.rake.databinding.ActivityPickerBinding
@@ -39,7 +40,7 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
         firebaseUser = FirebaseAuth.getInstance().currentUser
         userUid = firebaseUser?.uid
         if (defaultSharedPreferences.getString(Constants.KEY_CURRENT_USER_UID, "") == "") {
-            defaultSharedPreferences.edit().putString(Constants.KEY_CURRENT_USER_UID, userUid).apply()
+            defaultSharedPreferences.edit(commit = true) { putString(Constants.KEY_CURRENT_USER_UID, userUid) }
         }
 
         addUserToFirestore()

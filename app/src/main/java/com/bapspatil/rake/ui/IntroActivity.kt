@@ -2,6 +2,7 @@ package com.bapspatil.rake.ui
 
 import android.os.Bundle
 import android.text.Html
+import androidx.core.content.edit
 import com.bapspatil.rake.R
 import com.bapspatil.rake.util.Constants
 import com.heinrichreimersoftware.materialintro.app.IntroActivity
@@ -55,7 +56,7 @@ class IntroActivity : IntroActivity() {
                 .image(R.drawable.privacy)
                 .buttonCtaLabel("I AGREE")
                 .buttonCtaClickListener {
-                    defaultSharedPreferences.edit().putBoolean(Constants.KEY_PREFERENCE_FIRST_LAUNCH, false).apply()
+                    defaultSharedPreferences.edit(commit = true) { putBoolean(Constants.KEY_PREFERENCE_FIRST_LAUNCH, false) }
                     startActivity<PickerActivity>()
                     finish()
                 }
