@@ -15,8 +15,8 @@ import com.bapspatil.rake.adapter.BarcodeResultAdapter
 import com.bapspatil.rake.adapter.ImageResultAdapter
 import com.bapspatil.rake.adapter.TextResultAdapter
 import com.bapspatil.rake.databinding.ActivityCameraBinding
-import com.bapspatil.rake.util.CommonUtils.base64
 import com.bapspatil.rake.util.CommonUtils.resize
+import com.bapspatil.rake.util.CommonUtils.toByteArray
 import com.bapspatil.rake.util.Constants
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.FirebaseAuth
@@ -28,11 +28,15 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.label.FirebaseVisionCloudImageLabelerOptions
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel
 import com.google.firebase.ml.vision.text.FirebaseVisionText
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
+import com.google.firebase.storage.StorageReference
 import com.wonderkiln.camerakit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.longToast
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("RestrictedApi")
@@ -52,6 +56,8 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var barcodeResultAdapter: BarcodeResultAdapter
     private lateinit var imageResultAdapter: ImageResultAdapter
     private lateinit var firestoreDb: FirebaseFirestore
+    private lateinit var firebaseStorage: FirebaseStorage
+    private lateinit var globalStorageRef: StorageReference
     private var userUid: String? = null
     private lateinit var keyFunction: String
 
@@ -59,10 +65,15 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_camera)
         job = Job()
-        firestoreDb = FirebaseFirestore.getInstance()
+
         userUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         keyFunction = intent.getStringExtra(Constants.KEY_FUNCTION)
+
+        firebaseStorage = FirebaseStorage.getInstance()
+        globalStorageRef = firebaseStorage.reference
+
+        firestoreDb = FirebaseFirestore.getInstance()
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
 
@@ -137,36 +148,54 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun saveLabelledImageToFirestore() {
-        // TODO: Use Firebase Storage to store images instead
         progressDialog.show()
         progressDialog.setMessage("Saving data to the cloud...")
-        val base64OfImage = bitmap.resize(bitmap.width / 3, bitmap.height / 3).base64()
+        val imageFileName = Calendar.getInstance().time.toString().replace(" ", "")
+        val imageByteArrayToUpload = bitmap.resize(bitmap.width / 3, bitmap.height / 3).toByteArray()
+        var imageFileUrl: String?
         val imageHeight = bitmap.height
         val imageWidth = bitmap.width
         val labels = imageResultAdapter.getLabels()
+        
+        val imageStorageRef = userUid?.let { globalStorageRef.child("$it/$imageFileName") }
+        val metadata = StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build()
+        val uploadTask = imageStorageRef?.putBytes(imageByteArrayToUpload, metadata)
+        uploadTask?.addOnFailureListener { e ->
+            Log.e("UPLOAD_ERROR", e.message)
+        }?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                imageStorageRef.downloadUrl.addOnCompleteListener { downloadTask ->
+                    imageFileUrl = downloadTask.result.toString()
+                    Log.d("IMAGE_URL", imageFileUrl)
 
-        val labelledImageMap = hashMapOf(
-                Constants.KEY_FIRESTORE_LI_IMAGE_FILE to base64OfImage,
-                Constants.KEY_FIRESTORE_LI_IMAGE_HEIGHT to imageHeight,
-                Constants.KEY_FIRESTORE_LI_IMAGE_WIDTH to imageWidth,
-                Constants.KEY_FIRESTORE_LI_LABELS to labels
-        )
+                    val labelledImageMap = hashMapOf(
+                            Constants.KEY_FIRESTORE_LI_IMAGE_FILE to imageFileUrl,
+                            Constants.KEY_FIRESTORE_LI_IMAGE_HEIGHT to imageHeight,
+                            Constants.KEY_FIRESTORE_LI_IMAGE_WIDTH to imageWidth,
+                            Constants.KEY_FIRESTORE_LI_LABELS to labels
+                    )
 
-        val labelledImageDoc = firestoreDb.collection(Constants.KEY_FIRESTORE_USERS)
-                .document(userUid!!)
-                .collection(Constants.KEY_FIRESTORE_USER_LABELLED_IMAGES)
-                .document()
-        firestoreDb.runTransaction { transaction ->
-            transaction.set(labelledImageDoc, labelledImageMap)
+                    val labelledImageDoc = firestoreDb.collection(Constants.KEY_FIRESTORE_USERS)
+                            .document(userUid!!)
+                            .collection(Constants.KEY_FIRESTORE_USER_LABELLED_IMAGES)
+                            .document()
+                    firestoreDb.runTransaction { transaction ->
+                        transaction.set(labelledImageDoc, labelledImageMap)
+                    }
+                            .addOnFailureListener { e ->
+                                longToast(e.message.toString())
+                                progressDialog.hide()
+                            }
+                            .addOnSuccessListener {
+                                longToast("Success!")
+                                progressDialog.hide()
+                            }
+                }
+                
+            }
         }
-                .addOnFailureListener { e ->
-                    longToast(e.message.toString())
-                    progressDialog.hide()
-                }
-                .addOnSuccessListener {
-                    longToast("SUCCESS!")
-                    progressDialog.hide()
-                }
     }
 
     private fun labelImage(image: FirebaseVisionImage) {
