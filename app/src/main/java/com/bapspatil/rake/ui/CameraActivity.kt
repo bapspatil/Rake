@@ -15,9 +15,8 @@ import com.bapspatil.rake.adapter.BarcodeResultAdapter
 import com.bapspatil.rake.adapter.ImageResultAdapter
 import com.bapspatil.rake.adapter.TextResultAdapter
 import com.bapspatil.rake.databinding.ActivityCameraBinding
-import com.bapspatil.rake.util.CommonUtils.resize
-import com.bapspatil.rake.util.CommonUtils.toByteArray
 import com.bapspatil.rake.util.Constants
+import com.bapspatil.rake.util.FirebaseHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,14 +28,12 @@ import com.google.firebase.ml.vision.label.FirebaseVisionCloudImageLabelerOption
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import com.wonderkiln.camerakit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.longToast
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("RestrictedApi")
@@ -124,76 +121,22 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
 
             saveToFirestoreFab.setOnClickListener {
                 // TODO: Save to Firestore here.
+                progressDialog.show()
+                progressDialog.setMessage("Saving data to the cloud...")
+
+                val firebaseHelper = FirebaseHelper(bitmap, userUid, globalStorageRef, firestoreDb, this@CameraActivity, progressDialog)
+
                 when (keyFunction) {
                     Constants.VALUE_LABEL_IMAGE -> {
-                        saveLabelledImageToFirestore()
+                        firebaseHelper.saveLabelledImageToFirestore(imageResultAdapter.getLabels())
                     }
                     Constants.VALUE_SCAN_BARCODE -> {
-                        saveScannedBarcodeToFirestore()
+                        // saveScannedBarcodeToFirestore()
                     }
                     Constants.VALUE_RECOGNIZE_TEXT -> {
-                        saveRecognizedTextToFirestore()
+                        // saveRecognizedTextToFirestore()
                     }
                 }
-            }
-        }
-    }
-
-    private fun saveRecognizedTextToFirestore() {
-
-    }
-
-    private fun saveScannedBarcodeToFirestore() {
-
-    }
-
-    private fun saveLabelledImageToFirestore() {
-        progressDialog.show()
-        progressDialog.setMessage("Saving data to the cloud...")
-        val imageFileName = Calendar.getInstance().time.toString().replace(" ", "")
-        val imageByteArrayToUpload = bitmap.resize(bitmap.width / 3, bitmap.height / 3).toByteArray()
-        var imageFileUrl: String?
-        val imageHeight = bitmap.height
-        val imageWidth = bitmap.width
-        val labels = imageResultAdapter.getLabels()
-        
-        val imageStorageRef = userUid?.let { globalStorageRef.child("$it/$imageFileName") }
-        val metadata = StorageMetadata.Builder()
-                .setContentType("image/jpeg")
-                .build()
-        val uploadTask = imageStorageRef?.putBytes(imageByteArrayToUpload, metadata)
-        uploadTask?.addOnFailureListener { e ->
-            Log.e("UPLOAD_ERROR", e.message)
-        }?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                imageStorageRef.downloadUrl.addOnCompleteListener { downloadTask ->
-                    imageFileUrl = downloadTask.result.toString()
-                    Log.d("IMAGE_URL", imageFileUrl)
-
-                    val labelledImageMap = hashMapOf(
-                            Constants.KEY_FIRESTORE_LI_IMAGE_FILE to imageFileUrl,
-                            Constants.KEY_FIRESTORE_LI_IMAGE_HEIGHT to imageHeight,
-                            Constants.KEY_FIRESTORE_LI_IMAGE_WIDTH to imageWidth,
-                            Constants.KEY_FIRESTORE_LI_LABELS to labels
-                    )
-
-                    val labelledImageDoc = firestoreDb.collection(Constants.KEY_FIRESTORE_USERS)
-                            .document(userUid!!)
-                            .collection(Constants.KEY_FIRESTORE_USER_LABELLED_IMAGES)
-                            .document()
-                    firestoreDb.runTransaction { transaction ->
-                        transaction.set(labelledImageDoc, labelledImageMap)
-                    }
-                            .addOnFailureListener { e ->
-                                longToast(e.message.toString())
-                                progressDialog.hide()
-                            }
-                            .addOnSuccessListener {
-                                longToast("Success!")
-                                progressDialog.hide()
-                            }
-                }
-                
             }
         }
     }

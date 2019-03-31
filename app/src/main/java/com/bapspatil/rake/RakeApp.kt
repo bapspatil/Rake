@@ -6,5 +6,4 @@ import android.app.Application
 ** Created by Bapusaheb Patil {@link https://bapspatil.com}
 */
 
-class RakeApp : Application() {
-}
+class RakeApp : Application()

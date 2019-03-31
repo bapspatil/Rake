@@ -7,8 +7,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayOutputStream
 
-
-
 /*
 ** Created by Bapusaheb Patil {@link https://bapspatil.com}
 */
@@ -46,7 +44,7 @@ object CommonUtils {
         return resizedBitmap
     }
 
-    fun Bitmap.toByteArray() : ByteArray {
+    fun Bitmap.toByteArray(): ByteArray {
         val baos = ByteArrayOutputStream()
         this.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         return baos.toByteArray()
