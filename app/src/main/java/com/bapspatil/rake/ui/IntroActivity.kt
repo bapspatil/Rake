@@ -1,7 +1,6 @@
 package com.bapspatil.rake.ui
 
 import android.os.Bundle
-import android.text.Html
 import androidx.core.content.edit
 import com.bapspatil.rake.R
 import com.bapspatil.rake.util.Constants
@@ -51,7 +50,7 @@ class IntroActivity : IntroActivity() {
 
         addSlide(SimpleSlide.Builder()
                 .title("Let's talk about your privacy.")
-                .description("Please read and agree to the\n" + Html.fromHtml(getString(R.string.privacy_policy)) + " before proceeding further.")
+                .description("Please read and agree to the Privacy Policy before proceeding further:\nhttps://bit.ly/rake-privacy")
                 .background(R.color.white)
                 .image(R.drawable.privacy)
                 .buttonCtaLabel("I AGREE")
