@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    Created by Bapusaheb Patil {@link https://bapspatil.com}
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@color/white"/>
+    <item
+        android:left="48dp"
+        android:right="48dp">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/splash_icon"/>
+    </item>
+</layer-list>
