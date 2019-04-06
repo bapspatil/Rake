@@ -93,4 +93,8 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
         super.onDestroy()
         job.cancel()
     }
+
+    override fun onBackPressed() {
+        finishAffinity()
+    }
 }
