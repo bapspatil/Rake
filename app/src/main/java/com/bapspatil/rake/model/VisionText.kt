@@ -1,4 +1,4 @@
-package com.bapspatil.rake.model.mlkit
+package com.bapspatil.rake.model
 
 /*
 ** Created by Bapusaheb Patil {@link https://bapspatil.com}

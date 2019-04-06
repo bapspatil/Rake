@@ -1,4 +1,4 @@
-package com.bapspatil.rake.model.mlkit
+package com.bapspatil.rake.model
 
 data class BlockOfText(
     val text: String,

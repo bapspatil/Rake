@@ -32,7 +32,7 @@
 -keepattributes *Annotation*
 
 # Firebase Firestore
--keep class com.bapspatil.rake.model.mlkit.** { *; }
+-keep class com.bapspatil.rake.model.** { *; }
 -dontwarn okio.**
 -dontwarn retrofit2.Call
 -dontnote retrofit2.Platform$IOS$MainThreadExecutor
