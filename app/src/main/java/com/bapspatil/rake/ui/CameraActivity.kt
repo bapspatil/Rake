@@ -3,20 +3,20 @@ package com.bapspatil.rake.ui
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import com.bapspatil.rake.R
 import com.bapspatil.rake.adapter.BarcodeResultAdapter
 import com.bapspatil.rake.adapter.ImageResultAdapter
 import com.bapspatil.rake.adapter.TextResultAdapter
 import com.bapspatil.rake.databinding.ActivityCameraBinding
+import com.bapspatil.rake.firebase.FirebaseHelper
 import com.bapspatil.rake.util.Constants
-import com.bapspatil.rake.util.FirebaseHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +29,6 @@ import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.wonderkiln.camerakit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,7 +45,7 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
     private val progressDialog: ProgressDialog by lazy {
         ProgressDialog(this)
     }
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<NestedScrollView>
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
 
     private lateinit var bitmap: Bitmap
     private lateinit var textResultAdapter: TextResultAdapter
@@ -75,28 +74,14 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
 
         binding.apply {
-            cameraView.addCameraKitListener(object : CameraKitEventListener {
-                override fun onEvent(event: CameraKitEvent?) {
-                    // Not implemented
-                }
-
-                override fun onError(error: CameraKitError?) {
-                    // Not implemented
-                }
-
-                override fun onVideo(video: CameraKitVideo?) {
-                    // Not implemented
-                }
-
-                override fun onImage(image: CameraKitImage?) {
-                    showPreview(image)
-                    bitmap = image!!.bitmap
-                }
-            })
+            cameraView.requestPermissions(this@CameraActivity)
 
             captureFab.setOnClickListener {
-                if (previewImageView.visibility == View.GONE) {
-                    cameraView.captureImage()
+                if (previewImageView.visibility == View.INVISIBLE) {
+                    cameraView.captureImage { cameraKitView, bytes ->
+                        showPreview(bytes!!)
+                        bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    }
                 } else {
                     if (!progressDialog.isShowing) {
                         progressDialog.setCanceledOnTouchOutside(false)
@@ -173,17 +158,14 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    // TODO: Make barcode scanning better.
     private fun scanBarcode(image: FirebaseVisionImage) {
         val options = FirebaseVisionBarcodeDetectorOptions.Builder()
-                .setBarcodeFormats(
-                        FirebaseVisionBarcode.FORMAT_ALL_FORMATS)
+                .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_ALL_FORMATS)
                 .build()
         val detector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
         detector.detectInImage(image)
                 .addOnSuccessListener {
-                    //                    for (barcode in barcodes) {
-//                        val bounds = barcode.boundingBox
+                    //                        val bounds = barcode.boundingBox
 //                        val corners = barcode.cornerPoints
 //
 //                        val rawValue = barcode.rawValue
@@ -215,6 +197,7 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                         progressDialog.hide()
                     binding.saveToFirestoreFab.visibility = View.VISIBLE
                 }
+
     }
 
     private fun updateUIForBarcodeScan(barcode: FirebaseVisionBarcode) {
@@ -274,7 +257,7 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
             cameraView.visibility = View.VISIBLE
             previewImageView.apply {
                 setImageBitmap(null)
-                visibility = View.GONE
+                visibility = View.INVISIBLE
             }
             captureFab.setImageResource(R.drawable.ic_camera_white_24dp)
             retryFab.visibility = View.GONE
@@ -283,30 +266,45 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    private fun showPreview(cameraKitImage: CameraKitImage?) {
+    private fun showPreview(byteArray: ByteArray) {
         binding.apply {
-            cameraView.visibility = View.GONE
             previewImageView.apply {
-                setImageBitmap(cameraKitImage?.bitmap)
+                setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size))
                 visibility = View.VISIBLE
             }
+            cameraView.visibility = View.GONE
             captureFab.setImageResource(R.drawable.ic_done_white_24dp)
             retryFab.visibility = View.VISIBLE
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        binding.cameraView.onStart()
+    }
+
     override fun onResume() {
         super.onResume()
-        binding.cameraView.start()
+        binding.cameraView.onResume()
     }
 
     override fun onPause() {
-        binding.cameraView.stop()
+        binding.cameraView.onPause()
         super.onPause()
+    }
+
+    override fun onStop() {
+        binding.cameraView.onStop()
+        super.onStop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        binding.cameraView.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }
