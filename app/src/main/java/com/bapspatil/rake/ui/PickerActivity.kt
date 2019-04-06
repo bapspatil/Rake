@@ -5,9 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bapspatil.rake.R
+import com.bapspatil.rake.adapter.PickerAdapter
 import com.bapspatil.rake.databinding.ActivityPickerBinding
 import com.bapspatil.rake.util.Constants
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -45,7 +50,7 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
 
         addUserToFirestore()
 
-        setClickListeners()
+        setupRecyclerView()
     }
 
     private fun addUserToFirestore() {
@@ -58,26 +63,28 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
                 }
     }
 
-    private fun setClickListeners() {
+    private fun setupRecyclerView() {
         binding.apply {
-            recognizeTextCardView.setOnClickListener {
-                startActivity<CameraActivity>(Constants.KEY_FUNCTION to Constants.VALUE_RECOGNIZE_TEXT)
-            }
-            scanBarcodeCardView.setOnClickListener {
-                startActivity<CameraActivity>(Constants.KEY_FUNCTION to Constants.VALUE_SCAN_BARCODE)
-            }
-            labelImageCardView.setOnClickListener {
-                startActivity<CameraActivity>(Constants.KEY_FUNCTION to Constants.VALUE_LABEL_IMAGE)
-            }
+            pickerRecyclerView.layoutManager = LinearLayoutManager(this@PickerActivity, RecyclerView.HORIZONTAL, false)
+            LinearSnapHelper().attachToRecyclerView(pickerRecyclerView)
+
+            val pickerOptions = arrayListOf("Recognize Text", "Scan Barcodes", "Label Images")
+            pickerRecyclerView.adapter = PickerAdapter(pickerOptions)
         }
     }
 
     private fun setupAppBar() {
         binding.apply {
             collapsingToolbar.apply {
-                // TODO: Change this to transparent when you add the header image, doofus.
-                setExpandedTitleColor(ContextCompat.getColor(this@PickerActivity, android.R.color.white))
-                setCollapsedTitleTextColor(ContextCompat.getColor(this@PickerActivity, R.color.white))
+                setExpandedTitleColor(ContextCompat.getColor(this@PickerActivity, R.color.colorPrimary))
+                setCollapsedTitleTextColor(ContextCompat.getColor(this@PickerActivity, R.color.colorPrimary))
+            }
+            logoutButton.setOnClickListener {
+                AuthUI.getInstance()
+                        .signOut(this@PickerActivity)
+                        .addOnSuccessListener {
+                            startActivity<AuthActivity>()
+                        }
             }
         }
     }

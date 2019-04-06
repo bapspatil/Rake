@@ -46,6 +46,8 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
                             AuthUI.IdpConfig.GoogleBuilder().build(),
                             AuthUI.IdpConfig.EmailBuilder().build()
                     ))
+                    .setLogo(R.drawable.full_logo)
+                    .setTheme(R.style.FirebaseUITheme)
                     .setTosAndPrivacyPolicyUrls("https://github.com/bapspatil/privacy/blob/master/Rake-Terms-Of-Service.md",
                             "https://github.com/bapspatil/privacy/blob/master/Rake-Privacy-Policy.md")
                     .setIsSmartLockEnabled(!BuildConfig.DEBUG, true)

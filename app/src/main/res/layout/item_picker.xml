@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    Created by Bapusaheb Patil {@link https://bapspatil.com}
+-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="#FFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="12dp"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="16dp">
+
+    <TextView
+        android:id="@+id/textPickerItemView"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="24dp"
+        tools:text="LABEL\nIMAGES"
+        android:textStyle="bold" />
+</androidx.cardview.widget.CardView>
