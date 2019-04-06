@@ -32,7 +32,6 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import org.jetbrains.anko.longToast
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("RestrictedApi")
@@ -167,7 +166,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                     Log.d("BARCODE_SCAN", exception.toString())
                 }
                 .addOnCompleteListener {
-                    longToast("Barcode scan done!")
                     if (progressDialog.isShowing)
                         progressDialog.hide()
                     binding.saveToFirestoreFab.visibility = View.VISIBLE
