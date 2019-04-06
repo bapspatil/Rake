@@ -47,4 +47,3 @@ fun CameraCharacteristics.getFlashes(): Array<CameraFlash> {
         return emptyArray()
     }
 }
-

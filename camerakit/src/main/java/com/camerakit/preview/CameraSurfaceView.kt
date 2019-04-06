@@ -14,11 +14,11 @@ class CameraSurfaceView : GLSurfaceView, GLSurfaceView.Renderer {
     var cameraSurfaceTextureListener: CameraSurfaceTextureListener? = null
     private var cameraSurfaceTexture: CameraSurfaceTexture? = null
 
-    constructor(context: Context)
-            : super(context)
+    constructor(context: Context) :
+            super(context)
 
-    constructor(context: Context, attributeSet: AttributeSet)
-            : super(context, attributeSet)
+    constructor(context: Context, attributeSet: AttributeSet) :
+            super(context, attributeSet)
 
     init {
         setEGLContextClientVersion(2)
@@ -112,7 +112,5 @@ class CameraSurfaceView : GLSurfaceView, GLSurfaceView.Renderer {
             }
             System.loadLibrary("camerakit")
         }
-
     }
-
 }

@@ -7,7 +7,6 @@ import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.media.ImageReader
 import androidx.annotation.RequiresApi
-import android.util.Log
 import android.view.Surface
 import com.camerakit.api.CameraApi
 import com.camerakit.api.CameraAttributes
@@ -101,10 +100,10 @@ class Camera2(eventsDelegate: CameraEvents, context: Context) :
             val surface = Surface(surfaceTexture)
             cameraDevice.getCaptureSession(surface, imageReader, cameraHandler) { captureSession ->
 
-                if(captureSession != null) {
+                if (captureSession != null) {
                     this.captureSession = captureSession
                 }
-                
+
                 if (captureSession != null) {
                     val previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                     previewRequestBuilder.addTarget(surface)
@@ -184,7 +183,6 @@ class Camera2(eventsDelegate: CameraEvents, context: Context) :
                 else -> CaptureRequest.FLASH_MODE_OFF
             })
             captureSession.setRepeatingRequest(previewRequestBuilder.build(), captureCallback, cameraHandler)
-
         }
     }
 
@@ -289,7 +287,6 @@ class Camera2(eventsDelegate: CameraEvents, context: Context) :
         override fun onCaptureProgressed(session: CameraCaptureSession, request: CaptureRequest, partialResult: CaptureResult) {
             process(partialResult)
         }
-
     }
 
     companion object {
@@ -300,8 +297,10 @@ class Camera2(eventsDelegate: CameraEvents, context: Context) :
         private const val STATE_PICTURE_TAKEN = 4
     }
 
-    private class Attributes(cameraCharacteristics: CameraCharacteristics,
-                             cameraFacing: CameraFacing) : CameraAttributes {
+    private class Attributes(
+        cameraCharacteristics: CameraCharacteristics,
+        cameraFacing: CameraFacing
+    ) : CameraAttributes {
 
         override val facing: CameraFacing = cameraFacing
 
@@ -312,7 +311,5 @@ class Camera2(eventsDelegate: CameraEvents, context: Context) :
         override val photoSizes: Array<CameraSize> = cameraCharacteristics.getPhotoSizes()
 
         override val flashes: Array<CameraFlash> = cameraCharacteristics.getFlashes()
-
     }
-
 }

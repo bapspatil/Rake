@@ -73,8 +73,5 @@ class CameraSurfaceTexture(inputTexture: Int, val outputTexture: Int) : SurfaceT
         init {
             System.loadLibrary("camerakit")
         }
-
     }
-
 }
-

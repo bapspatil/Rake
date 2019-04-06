@@ -300,5 +300,4 @@ class CameraPreview : FrameLayout, CameraEvents {
         fun onPreviewStarted()
         fun onPreviewStopped()
     }
-
 }

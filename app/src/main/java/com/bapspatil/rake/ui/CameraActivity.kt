@@ -105,7 +105,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
             }
 
             saveToFirestoreFab.setOnClickListener {
-                // TODO: Save to Firestore here.
                 progressDialog.show()
                 progressDialog.setMessage("Saving data to the cloud...")
 
@@ -116,10 +115,10 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                         firebaseHelper.saveLabelledImageToFirestore(imageResultAdapter.getLabels())
                     }
                     Constants.VALUE_SCAN_BARCODE -> {
-                        // saveScannedBarcodeToFirestore()
+                        firebaseHelper.saveScannedBarcodeToFirestore(barcodeResultAdapter.getInfo())
                     }
                     Constants.VALUE_RECOGNIZE_TEXT -> {
-                        // saveRecognizedTextToFirestore()
+                        firebaseHelper.saveRecognizedTextToFirestore(textResultAdapter.getBlocksOfText())
                     }
                 }
             }
@@ -134,11 +133,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 .getCloudImageLabeler(options)
         detector.processImage(image)
                 .addOnSuccessListener { labels ->
-                    for (label in labels) {
-//                        val text = label.text
-//                        val entityId = label.entityId
-//                        val confidence = label.confidence
-                    }
                     updateUIForImageLabeling(labels)
                 }
                 .addOnFailureListener { exception ->
@@ -165,25 +159,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         val detector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
         detector.detectInImage(image)
                 .addOnSuccessListener {
-                    //                        val bounds = barcode.boundingBox
-//                        val corners = barcode.cornerPoints
-//
-//                        val rawValue = barcode.rawValue
-//
-//                        val valueType = barcode.valueType
-//                        // See API reference for complete list of supported types
-//                        when (valueType) {
-//                            FirebaseVisionBarcode.TYPE_WIFI -> {
-//                                val ssid = barcode.wifi!!.ssid
-//                                val password = barcode.wifi!!.password
-//                                val type = barcode.wifi!!.encryptionType
-//                            }
-//                            FirebaseVisionBarcode.TYPE_URL -> {
-//                                val title = barcode.url!!.title
-//                                val url = barcode.url!!.url
-//                            }
-//                        }
-//                    }
                     for (barcode in it) {
                         updateUIForBarcodeScan(barcode)
                     }
@@ -197,7 +172,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                         progressDialog.hide()
                     binding.saveToFirestoreFab.visibility = View.VISIBLE
                 }
-
     }
 
     private fun updateUIForBarcodeScan(barcode: FirebaseVisionBarcode) {
@@ -208,31 +182,9 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun recognizeText(image: FirebaseVisionImage) {
-        val textRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
+        val textRecognizer = FirebaseVision.getInstance().cloudTextRecognizer
         textRecognizer.processImage(image)
                 .addOnSuccessListener { firebaseVisionText ->
-                    //                    val resultText = firebaseVisionText.text
-//                    for (block in firebaseVisionText.textBlocks) {
-//                        val blockText = block.text
-//                        val blockConfidence = block.confidence
-//                        val blockLanguages = block.recognizedLanguages
-//                        val blockCornerPoints = block.cornerPoints
-//                        val blockFrame = block.boundingBox
-//                        for (line in block.lines) {
-//                            val lineText = line.text
-//                            val lineConfidence = line.confidence
-//                            val lineLanguages = line.recognizedLanguages
-//                            val lineCornerPoints = line.cornerPoints
-//                            val lineFrame = line.boundingBox
-//                            for (element in line.elements) {
-//                                val elementText = element.text
-//                                val elementConfidence = element.confidence
-//                                val elementLanguages = element.recognizedLanguages
-//                                val elementCornerPoints = element.cornerPoints
-//                                val elementFrame = element.boundingBox
-//                            }
-//                        }
-//                    }
                     updateUIForTextRecognition(firebaseVisionText)
                 }
                 .addOnFailureListener { exception ->

@@ -50,5 +50,4 @@ class ManagedCameraApi(private val delegate: CameraApi) : CameraApi by delegate 
     override fun capturePhoto(callback: (jpeg: ByteArray) -> Unit) {
         cameraHandler.run { delegate.capturePhoto(callback) }
     }
-
 }

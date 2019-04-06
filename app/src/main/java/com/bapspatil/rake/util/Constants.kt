@@ -6,7 +6,6 @@ package com.bapspatil.rake.util
 
 class Constants {
     companion object {
-        const val KEY_TEXT_RESULT = "KEY_TEXT_RESULT"
         const val KEY_FUNCTION = "KEY_FUNCTION"
         const val VALUE_RECOGNIZE_TEXT = "VALUE_RECOGNIZE_TEXT"
         const val VALUE_SCAN_BARCODE = "VALUE_SCAN_BARCODE"
@@ -28,5 +27,17 @@ class Constants {
         const val KEY_FIRESTORE_LI_IMAGE_HEIGHT = "imageHeight"
         const val KEY_FIRESTORE_LI_IMAGE_WIDTH = "imageWidth"
         const val KEY_FIRESTORE_LI_LABELS = "labels"
+
+        // Firestore Scanned Barcode keys
+        const val KEY_FIRESTORE_SB_IMAGE_FILE = "imageFile"
+        const val KEY_FIRESTORE_SB_IMAGE_HEIGHT = "imageHeight"
+        const val KEY_FIRESTORE_SB_IMAGE_WIDTH = "imageWidth"
+        const val KEY_FIRESTORE_SB_INFO = "info"
+
+        // Firebase Recognized Text keys
+        const val KEY_FIRESTORE_RT_IMAGE_FILE = "imageFile"
+        const val KEY_FIRESTORE_RT_IMAGE_HEIGHT = "imageHeight"
+        const val KEY_FIRESTORE_RT_IMAGE_WIDTH = "imageWidth"
+        const val KEY_FIRESTORE_RT_BLOCKS = "blocks"
     }
 }

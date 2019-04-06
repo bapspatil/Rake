@@ -11,9 +11,9 @@ class CameraSizeCalculator(private val sizes: Array<CameraSize>) {
         var bestSize = sizes.last()
         var bestArea = Int.MAX_VALUE
         sizes.forEach {
-            if (it.width >= target.width
-                    && it.height >= target.height
-                    && it.area() < bestArea) {
+            if (it.width >= target.width &&
+                    it.height >= target.height &&
+                    it.area() < bestArea) {
                 bestSize = it
                 bestArea = it.area()
             }
@@ -35,5 +35,4 @@ class CameraSizeCalculator(private val sizes: Array<CameraSize>) {
 
         return bestSize
     }
-
 }

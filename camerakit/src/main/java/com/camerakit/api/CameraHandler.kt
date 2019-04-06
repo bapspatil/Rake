@@ -17,5 +17,4 @@ class CameraHandler private constructor(thread: HandlerThread) : Handler(thread.
         thread.setUncaughtExceptionHandler { thread, exception ->
         }
     }
-
 }

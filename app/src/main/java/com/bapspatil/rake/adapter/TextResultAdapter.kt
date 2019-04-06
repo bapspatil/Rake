@@ -32,4 +32,12 @@ class TextResultAdapter(private val mContext: Context, private val mTextList: Li
     inner class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textResultTextView: TextView = itemView.textItemTextView
     }
+
+    fun getBlocksOfText(): ArrayList<String> {
+        val mStringBlocks = arrayListOf<String>()
+        mTextList.forEach { label ->
+            mStringBlocks.add(label.text)
+        }
+        return mStringBlocks
+    }
 }

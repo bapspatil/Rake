@@ -24,5 +24,4 @@ data class CameraSize(val width: Int, val height: Int) : Comparable<CameraSize> 
             return 0
         }
     }
-
 }

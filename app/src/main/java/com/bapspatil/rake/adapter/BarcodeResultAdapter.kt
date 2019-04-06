@@ -32,4 +32,6 @@ class BarcodeResultAdapter(private val mContext: Context, private val mBarcode: 
     inner class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textResultTextView: TextView = itemView.textItemTextView
     }
+
+    fun getInfo(): String? = mBarcode.displayValue
 }

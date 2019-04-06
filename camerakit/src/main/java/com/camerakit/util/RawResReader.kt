@@ -11,5 +11,4 @@ class RawResReader(context: Context, @RawRes resId: Int) {
         val inputStream = context.resources.openRawResource(resId)
         value = inputStream.bufferedReader().use { it.readText() }
     }
-
 }

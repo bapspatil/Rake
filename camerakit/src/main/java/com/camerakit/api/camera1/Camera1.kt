@@ -102,7 +102,7 @@ class Camera1(eventsDelegate: CameraEvents) :
         val camera = camera
         if (camera != null) {
             val parameters = camera.parameters
-            parameters.flashMode = when(flash) {
+            parameters.flashMode = when (flash) {
                 CameraFlash.OFF -> Camera.Parameters.FLASH_MODE_OFF
                 CameraFlash.ON -> Camera.Parameters.FLASH_MODE_ON
                 CameraFlash.AUTO -> Camera.Parameters.FLASH_MODE_AUTO
@@ -143,9 +143,11 @@ class Camera1(eventsDelegate: CameraEvents) :
         }
     }
 
-    private class Attributes(cameraInfo: Camera.CameraInfo,
-                             cameraParameters: Camera.Parameters,
-                             cameraFacing: CameraFacing) : CameraAttributes {
+    private class Attributes(
+        cameraInfo: Camera.CameraInfo,
+        cameraParameters: Camera.Parameters,
+        cameraFacing: CameraFacing
+    ) : CameraAttributes {
 
         override val facing: CameraFacing = cameraFacing
 
@@ -157,5 +159,4 @@ class Camera1(eventsDelegate: CameraEvents) :
 
         override val flashes: Array<CameraFlash> = cameraParameters.getFlashes()
     }
-
 }

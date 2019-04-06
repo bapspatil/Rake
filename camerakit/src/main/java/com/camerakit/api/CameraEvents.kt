@@ -9,5 +9,4 @@ interface CameraEvents {
     fun onPreviewStarted()
     fun onPreviewStopped()
     fun onPreviewError()
-
 }

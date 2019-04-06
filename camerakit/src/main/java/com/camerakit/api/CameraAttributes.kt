@@ -11,5 +11,4 @@ interface CameraAttributes {
     val previewSizes: Array<CameraSize>
     val photoSizes: Array<CameraSize>
     val flashes: Array<CameraFlash>
-
 }
