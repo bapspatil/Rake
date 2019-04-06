@@ -1,4 +1,4 @@
-package com.bapspatil.rake.util
+package com.bapspatil.rake.firebase
 
 import android.app.ProgressDialog
 import android.content.Context
@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.bapspatil.rake.util.CommonUtils.resize
 import com.bapspatil.rake.util.CommonUtils.toByteArray
+import com.bapspatil.rake.util.Constants
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
