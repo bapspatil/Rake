@@ -54,10 +54,15 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:background="@color/white"
                 android:id="@+id/pickerRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:scrollbarSize="12dp"
+                android:scrollbarThumbHorizontal="@color/colorAccent"
+                android:scrollbars="horizontal"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_picker" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

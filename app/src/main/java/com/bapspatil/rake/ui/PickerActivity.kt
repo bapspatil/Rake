@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bapspatil.rake.R
 import com.bapspatil.rake.adapter.PickerAdapter
 import com.bapspatil.rake.databinding.ActivityPickerBinding
+import com.bapspatil.rake.model.PickerItem
 import com.bapspatil.rake.util.Constants
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -68,7 +69,11 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
             pickerRecyclerView.layoutManager = LinearLayoutManager(this@PickerActivity, RecyclerView.HORIZONTAL, false)
             LinearSnapHelper().attachToRecyclerView(pickerRecyclerView)
 
-            val pickerOptions = arrayListOf("Recognize Text", "Scan Barcodes", "Label Images")
+            val pickerOptions = arrayListOf(
+                    PickerItem("TEXT RECOGNITION", R.drawable.text_recognition, "Take a pic, and let Rake extract the text for you in that pic!", "RECOGNIZE TEXT"),
+                    PickerItem("BARCODE SCANNING", R.drawable.barcode_scanning, "Scan a barcode or a QR code and get the information from that code now!", "SCAN CODE"),
+                    PickerItem("IMAGE LABELING", R.drawable.image_labelling, "Let Rake label your images for you, so you can look up related info later on the web portal!", "LABEL IMAGES")
+            )
             pickerRecyclerView.adapter = PickerAdapter(pickerOptions)
         }
     }
