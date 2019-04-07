@@ -47,6 +47,7 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
                     ))
                     .setLogo(R.drawable.full_logo)
                     .setTheme(R.style.FirebaseUITheme)
+                    .setAlwaysShowSignInMethodScreen(true)
                     .setTosAndPrivacyPolicyUrls("https://github.com/bapspatil/privacy/blob/master/Rake-Terms-Of-Service.md",
                             "https://github.com/bapspatil/privacy/blob/master/Rake-Privacy-Policy.md")
                     .setIsSmartLockEnabled(!BuildConfig.DEBUG, true)
