@@ -21,7 +21,6 @@ namespace camerakit {
               = (CameraSurfaceView*) env->GetLongField(thiz, fields.nativeHandle);
 
       if (currentObject) {
-          // TODO: stop old
       }
 
       env->SetLongField(thiz, fields.nativeHandle, reinterpret_cast<jlong>(cameraSurfaceView));
@@ -40,7 +39,6 @@ namespace camerakit {
 
       jclass clazz = env->GetObjectClass(thiz);
       if (clazz == NULL) {
-          // TODO: throw error
           return;
       }
   }
@@ -68,7 +66,6 @@ namespace camerakit {
   static void CameraSurfaceView_finalize(JNIEnv* env, jobject thiz) {
       CameraSurfaceView* cameraSurfaceView = CameraSurfaceView_getCameraSurfaceView(env, thiz);
 
-      // TODO: stop resources
 
       CameraSurfaceView_setCameraSurfaceView(env, thiz, 0);
   }
@@ -98,13 +95,11 @@ namespace camerakit {
     int register_CameraSurfaceView(JNIEnv* env) {
         jclass clazz = env->FindClass(classPathName);
         if (clazz == NULL) {
-            // TODO: throw
             return -1;
         }
 
         jfieldID nativeHandle = env->GetFieldID(clazz, "nativeHandle", "J");
         if (nativeHandle == NULL) {
-            // TODO: throw
             return -1;
         }
 

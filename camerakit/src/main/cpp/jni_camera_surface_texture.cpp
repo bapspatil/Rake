@@ -21,7 +21,6 @@ namespace camerakit {
           = (CameraSurfaceTexture*) env->GetLongField(thiz, fields.nativeHandle);
 
       if (currentObject) {
-          // TODO: stop old
       }
 
       env->SetLongField(thiz, fields.nativeHandle, reinterpret_cast<jlong>(cameraSurfaceTexture));
@@ -40,7 +39,6 @@ namespace camerakit {
 
       jclass clazz = env->GetObjectClass(thiz);
       if (clazz == NULL) {
-          // TODO: throw error
           return;
       }
   }
@@ -62,7 +60,6 @@ namespace camerakit {
   static void CameraSurfaceTexture_finalize(JNIEnv* env, jobject thiz) {
       CameraSurfaceTexture* cameraSurfaceTexture = CameraSurfaceTexture_getCameraSurfaceTexture(env, thiz);
 
-      // TODO: stop resources
 
       CameraSurfaceTexture_setCameraSurfaceTexture(env, thiz, 0);
   }
@@ -89,13 +86,11 @@ namespace camerakit {
     int register_CameraSurfaceTexture(JNIEnv* env) {
         jclass clazz = env->FindClass(classPathName);
         if (clazz == NULL) {
-            // TODO: throw
             return -1;
         }
 
         jfieldID nativeHandle = env->GetFieldID(clazz, "nativeHandle", "J");
         if (nativeHandle == NULL) {
-            // TODO: throw
             return -1;
         }
 

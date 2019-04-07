@@ -21,7 +21,6 @@ namespace camerakit {
 
       GLuint program = CreateProgram(VertexShaderCode(), FragmentShaderCode());
       if (!program) {
-          // TODO: throw here
           return;
       }
 
@@ -35,7 +34,6 @@ namespace camerakit {
       if (glGetError() != GL_NO_ERROR) {
           glDeleteProgram(program);
 
-          // TODO: throw here
           return;
       }
 
@@ -150,7 +148,6 @@ namespace camerakit {
                   char* infoBuffer = (char*) malloc((size_t) infoLength);
                   if (infoBuffer) {
                       glGetShaderInfoLog(shader, infoLength, NULL, infoBuffer);
-                      // todo: output log
                       free(infoBuffer);
                   }
               }
@@ -175,10 +172,8 @@ namespace camerakit {
       GLuint program = glCreateProgram();
       if (program) {
           glAttachShader(program, vertexShader);
-          // TODO: check error and throw if needed
 
           glAttachShader(program, fragmentShader);
-          // TODO: check error and throw if needed
 
           glLinkProgram(program);
           GLint linkStatus = GL_FALSE;
@@ -190,7 +185,6 @@ namespace camerakit {
                   char* infoBuffer = (char*) malloc((size_t) infoLength);
                   if (infoBuffer) {
                       glGetProgramInfoLog(program, infoLength, NULL, infoBuffer);
-                      // todo: output log
                       free(infoBuffer);
                   }
               }
