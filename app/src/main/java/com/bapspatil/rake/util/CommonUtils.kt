@@ -1,7 +1,9 @@
 package com.bapspatil.rake.util
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Matrix
+import android.os.Build
 import android.util.Base64
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -48,5 +50,16 @@ object CommonUtils {
         val baos = ByteArrayOutputStream()
         this.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         return baos.toByteArray()
+    }
+
+    fun AppCompatActivity.makeUiLight() {
+        window.statusBarColor = Color.parseColor("#FFFFFF")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            window.navigationBarColor = Color.parseColor("#FFFFFF")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
     }
 }

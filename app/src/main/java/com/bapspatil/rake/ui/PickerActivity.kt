@@ -12,6 +12,7 @@ import com.bapspatil.rake.R
 import com.bapspatil.rake.adapter.PickerAdapter
 import com.bapspatil.rake.databinding.ActivityPickerBinding
 import com.bapspatil.rake.model.PickerItem
+import com.bapspatil.rake.util.CommonUtils.makeUiLight
 import com.bapspatil.rake.util.Constants
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +42,8 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
         job = Job()
         firestoreDb = FirebaseFirestore.getInstance()
         setupAppBar()
+
+        makeUiLight()
 
         // Saving the user's UID in SharedPreferences
         firebaseUser = FirebaseAuth.getInstance().currentUser
