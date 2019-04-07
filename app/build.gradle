@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
@@ -10,8 +11,8 @@ android {
         applicationId "com.bapspatil.rake"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 2
-        versionName "0.2.0"
+        versionCode 3
+        versionName "0.3.0"
         resConfigs "en"
         multiDexEnabled true
     }
@@ -62,8 +63,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
     implementation 'com.google.firebase:firebase-ml-vision:19.0.3'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:17.0.2'
-    implementation 'com.firebaseui:firebase-ui-firestore:4.3.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     // App Dependencies
     implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
