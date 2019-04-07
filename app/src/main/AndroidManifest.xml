@@ -55,7 +55,12 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr,label,barcode" />
 
-        <!--TODO: Customize icon for Firebase Cloud Messaging-->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_app_icon_512" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
     </application>
 
 </manifest>
