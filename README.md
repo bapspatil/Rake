@@ -1,7 +1,7 @@
 
 # Rake
 
-An Android app that analyses images and text, and lets users perform context-aware actions on the results. This app uses Firebase ML Kit, Firebase Authentication and Firebase Cloud Firestore for core functionality.
+An Android app that analyses images and text, and lets users perform context-aware actions on the results. This app uses Firebase ML Kit, Firebase Authentication, Firebase Storage and Firebase Cloud Firestore for core functionality.
 
 ## Developed By
 
