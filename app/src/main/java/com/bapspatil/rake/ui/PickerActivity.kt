@@ -67,7 +67,6 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
     private fun setupRecyclerView() {
         binding.apply {
             pickerRecyclerView.layoutManager = LinearLayoutManager(this@PickerActivity, RecyclerView.HORIZONTAL, false)
-            LinearSnapHelper().attachToRecyclerView(pickerRecyclerView)
 
             val pickerOptions = arrayListOf(
                     PickerItem("TEXT RECOGNITION", R.drawable.text_recognition, "Take a pic, and let Rake extract the text for you in that pic!", "RECOGNIZE TEXT"),
@@ -75,6 +74,9 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
                     PickerItem("IMAGE LABELING", R.drawable.image_labelling, "Let Rake label your images for you, so you can look up related info later on the web portal!", "LABEL IMAGES")
             )
             pickerRecyclerView.adapter = PickerAdapter(pickerOptions)
+
+            LinearSnapHelper().attachToRecyclerView(pickerRecyclerView)
+            pageIndicator.attachTo(pickerRecyclerView)
         }
     }
 

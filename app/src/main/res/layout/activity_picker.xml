@@ -48,9 +48,10 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -63,6 +64,19 @@
                 android:scrollbars="horizontal"
                 tools:itemCount="3"
                 tools:listitem="@layout/item_picker" />
-        </LinearLayout>
+
+            <com.chahinem.pageindicator.PageIndicator
+                android:id="@+id/pageIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                app:piAnimDuration="400"
+                app:piDefaultColor="@color/colorPrimary"
+                app:piDotSpacing="8dp"
+                app:piSelectedColor="@color/colorAccent"
+                app:piSize1="12dp" />
+        </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

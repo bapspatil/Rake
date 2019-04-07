@@ -76,6 +76,7 @@ dependencies {
     implementation project(':camerakit')
     implementation 'com.camerakit:jpegkit:0.2.2'
     implementation project(':material-intro') // https://github.com/heinrichreimer/material-intro
+    implementation 'com.github.chahine:pageindicator:0.2.7'
 }
 
 apply plugin: 'com.google.gms.google-services'
