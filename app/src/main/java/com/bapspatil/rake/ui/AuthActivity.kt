@@ -43,8 +43,7 @@ class AuthActivity : AppCompatActivity(), CoroutineScope {
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(Arrays.asList(
-                            AuthUI.IdpConfig.GoogleBuilder().build(),
-                            AuthUI.IdpConfig.EmailBuilder().build()
+                            AuthUI.IdpConfig.GoogleBuilder().build()
                     ))
                     .setLogo(R.drawable.full_logo)
                     .setTheme(R.style.FirebaseUITheme)
