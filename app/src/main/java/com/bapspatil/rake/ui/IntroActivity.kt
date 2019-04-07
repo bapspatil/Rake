@@ -1,5 +1,6 @@
 package com.bapspatil.rake.ui
 
+import android.Manifest
 import android.os.Bundle
 import androidx.core.content.edit
 import com.bapspatil.rake.R
@@ -53,6 +54,8 @@ class IntroActivity : IntroActivity() {
                 .description("Please read and agree to the Privacy Policy before proceeding further:\nhttps://bit.ly/rake-privacy")
                 .background(R.color.white)
                 .image(R.drawable.privacy)
+                .permission(Manifest.permission.CAMERA)
+                .permissionsRequestCode(0)
                 .buttonCtaLabel("I AGREE")
                 .buttonCtaClickListener {
                     defaultSharedPreferences.edit(commit = true) { putBoolean(Constants.KEY_PREFERENCE_FIRST_LAUNCH, false) }

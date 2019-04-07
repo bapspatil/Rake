@@ -17,6 +17,7 @@ import com.bapspatil.rake.adapter.TextResultAdapter
 import com.bapspatil.rake.databinding.ActivityCameraBinding
 import com.bapspatil.rake.firebase.FirebaseHelper
 import com.bapspatil.rake.util.Constants
+import com.camerakit.CameraKitView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -59,6 +60,18 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_camera)
+
+        binding.cameraView.requestPermissions(this@CameraActivity)
+        binding.cameraView.setPermissionsListener(object : CameraKitView.PermissionsListener {
+            override fun onPermissionsSuccess() {
+                // Not implemented.
+            }
+
+            override fun onPermissionsFailure() {
+                finish()
+            }
+        })
+
         job = Job()
 
         userUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -73,7 +86,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
 
         binding.apply {
-            cameraView.requestPermissions(this@CameraActivity)
 
             captureFab.setOnClickListener {
                 if (previewImageView.visibility == View.INVISIBLE) {
