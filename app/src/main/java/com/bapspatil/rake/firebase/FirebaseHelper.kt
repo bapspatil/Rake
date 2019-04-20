@@ -19,7 +19,8 @@ import java.util.*
 class FirebaseHelper constructor(private var bitmap: Bitmap, private val userUid: String?, private val globalStorageRef: StorageReference, private val firestoreDb: FirebaseFirestore, private val context: Context, private val progressDialog: ProgressDialog) {
 
     fun saveLabelledImageToFirestore(labels: ArrayList<String>) {
-        val imageFileName = Calendar.getInstance().time.toString().replace(" ", "")
+        val timestamp = Calendar.getInstance().time.toString()
+        val imageFileName = timestamp.replace(" ", "")
         val imageByteArrayToUpload = bitmap.toByteArray()
         var imageFileUrl: String?
         val imageHeight = bitmap.height
@@ -39,6 +40,7 @@ class FirebaseHelper constructor(private var bitmap: Bitmap, private val userUid
                     Log.d("IMAGE_URL", imageFileUrl)
 
                     val labelledImageMap = hashMapOf(
+                            Constants.KEY_FIRESTORE_LI_TIMESTAMP to timestamp,
                             Constants.KEY_FIRESTORE_LI_IMAGE_FILE to imageFileUrl,
                             Constants.KEY_FIRESTORE_LI_IMAGE_HEIGHT to imageHeight,
                             Constants.KEY_FIRESTORE_LI_IMAGE_WIDTH to imageWidth,
@@ -66,7 +68,8 @@ class FirebaseHelper constructor(private var bitmap: Bitmap, private val userUid
     }
 
     fun saveScannedBarcodeToFirestore(info: String?) {
-        val imageFileName = Calendar.getInstance().time.toString().replace(" ", "")
+        val timestamp = Calendar.getInstance().time.toString()
+        val imageFileName = timestamp.replace(" ", "")
         val imageByteArrayToUpload = bitmap.toByteArray()
         var imageFileUrl: String?
         val imageHeight = bitmap.height
@@ -86,6 +89,7 @@ class FirebaseHelper constructor(private var bitmap: Bitmap, private val userUid
                     Log.d("IMAGE_URL", imageFileUrl)
 
                     val scannedBarcodeMap = hashMapOf(
+                            Constants.KEY_FIRESTORE_SB_TIMESTAMP to timestamp,
                             Constants.KEY_FIRESTORE_SB_IMAGE_FILE to imageFileUrl,
                             Constants.KEY_FIRESTORE_SB_IMAGE_HEIGHT to imageHeight,
                             Constants.KEY_FIRESTORE_SB_IMAGE_WIDTH to imageWidth,
@@ -113,7 +117,8 @@ class FirebaseHelper constructor(private var bitmap: Bitmap, private val userUid
     }
 
     fun saveRecognizedTextToFirestore(blocks: ArrayList<String>) {
-        val imageFileName = Calendar.getInstance().time.toString().replace(" ", "")
+        val timestamp = Calendar.getInstance().time.toString()
+        val imageFileName = timestamp.replace(" ", "")
         val imageByteArrayToUpload = bitmap.toByteArray()
         var imageFileUrl: String?
         val imageHeight = bitmap.height
@@ -133,6 +138,7 @@ class FirebaseHelper constructor(private var bitmap: Bitmap, private val userUid
                     Log.d("IMAGE_URL", imageFileUrl)
 
                     val recognizedTextMap = hashMapOf(
+                            Constants.KEY_FIRESTORE_RT_TIMESTAMP to timestamp,
                             Constants.KEY_FIRESTORE_RT_IMAGE_FILE to imageFileUrl,
                             Constants.KEY_FIRESTORE_RT_IMAGE_HEIGHT to imageHeight,
                             Constants.KEY_FIRESTORE_RT_IMAGE_WIDTH to imageWidth,

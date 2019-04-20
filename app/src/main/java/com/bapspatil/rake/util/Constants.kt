@@ -23,18 +23,21 @@ class Constants {
         const val KEY_FIRESTORE_USER_RECOGNIZED_TEXT = "recognizedText"
 
         // Firestore Labelled Image keys
+        const val KEY_FIRESTORE_LI_TIMESTAMP = "timestamp"
         const val KEY_FIRESTORE_LI_IMAGE_FILE = "imageFile"
         const val KEY_FIRESTORE_LI_IMAGE_HEIGHT = "imageHeight"
         const val KEY_FIRESTORE_LI_IMAGE_WIDTH = "imageWidth"
         const val KEY_FIRESTORE_LI_LABELS = "labels"
 
         // Firestore Scanned Barcode keys
+        const val KEY_FIRESTORE_SB_TIMESTAMP = "timestamp"
         const val KEY_FIRESTORE_SB_IMAGE_FILE = "imageFile"
         const val KEY_FIRESTORE_SB_IMAGE_HEIGHT = "imageHeight"
         const val KEY_FIRESTORE_SB_IMAGE_WIDTH = "imageWidth"
         const val KEY_FIRESTORE_SB_INFO = "info"
 
         // Firebase Recognized Text keys
+        const val KEY_FIRESTORE_RT_TIMESTAMP = "timestamp"
         const val KEY_FIRESTORE_RT_IMAGE_FILE = "imageFile"
         const val KEY_FIRESTORE_RT_IMAGE_HEIGHT = "imageHeight"
         const val KEY_FIRESTORE_RT_IMAGE_WIDTH = "imageWidth"
