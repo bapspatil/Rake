@@ -77,6 +77,23 @@
                 app:piDotSpacing="8dp"
                 app:piSelectedColor="@color/colorAccent"
                 app:piSize1="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/websiteButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="16dp"
+                android:text="@string/website"
+                android:textAppearance="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:textColor="@color/colorPrimary"
+                android:textSize="11dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:textAllCaps="true"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="3dp" />
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

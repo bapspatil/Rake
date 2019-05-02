@@ -19,10 +19,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.android.synthetic.main.activity_picker.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.browse
 import org.jetbrains.anko.defaultSharedPreferences
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import kotlin.coroutines.CoroutineContext
 
@@ -95,6 +98,10 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
                         .addOnSuccessListener {
                             startActivity<AuthActivity>()
                         }
+            }
+            websiteButton.setOnClickListener {
+                longToast("Visit rake.now.sh to access your data on the web!")
+                browse("https://rake.now.sh")
             }
         }
     }
