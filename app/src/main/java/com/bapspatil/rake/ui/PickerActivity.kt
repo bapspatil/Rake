@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import kotlinx.android.synthetic.main.activity_picker.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -101,7 +100,7 @@ class PickerActivity : AppCompatActivity(), CoroutineScope {
             }
             websiteButton.setOnClickListener {
                 longToast("Visit rake.now.sh to access your data on the web!")
-                browse("https://rake.now.sh")
+                browse("https://rake.now.sh/#/dashboard")
             }
         }
     }
