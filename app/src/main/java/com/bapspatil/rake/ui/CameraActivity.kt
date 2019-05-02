@@ -30,9 +30,11 @@ import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.activity_camera.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import org.jetbrains.anko.startActivity
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("RestrictedApi")
@@ -56,10 +58,13 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var globalStorageRef: StorageReference
     private var userUid: String? = null
     private lateinit var keyFunction: String
+    private var shouldCallRisApi = false
+    private var risApiInput = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_camera)
+        job = Job()
 
         binding.cameraView.requestPermissions(this@CameraActivity)
         binding.cameraView.setPermissionsListener(object : CameraKitView.PermissionsListener {
@@ -71,8 +76,6 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                 finish()
             }
         })
-
-        job = Job()
 
         userUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -94,19 +97,23 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
                         bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                     }
                 } else {
-                    if (!progressDialog.isShowing) {
-                        progressDialog.setCanceledOnTouchOutside(false)
-                        progressDialog.setMessage(getString(R.string.scanning_image))
-                        progressDialog.setOnCancelListener {
-                            NavUtils.navigateUpFromSameTask(this@CameraActivity)
+                    if (!shouldCallRisApi) {
+                        if (!progressDialog.isShowing) {
+                            progressDialog.setCanceledOnTouchOutside(false)
+                            progressDialog.setMessage(getString(R.string.scanning_image))
+                            progressDialog.setOnCancelListener {
+                                NavUtils.navigateUpFromSameTask(this@CameraActivity)
+                            }
+                            progressDialog.show()
                         }
-                        progressDialog.show()
-                    }
-                    val image = FirebaseVisionImage.fromBitmap(bitmap)
-                    when (keyFunction) {
-                        Constants.VALUE_RECOGNIZE_TEXT -> recognizeText(image)
-                        Constants.VALUE_SCAN_BARCODE -> scanBarcode(image)
-                        Constants.VALUE_LABEL_IMAGE -> labelImage(image)
+                        val image = FirebaseVisionImage.fromBitmap(bitmap)
+                        when (keyFunction) {
+                            Constants.VALUE_RECOGNIZE_TEXT -> recognizeText(image)
+                            Constants.VALUE_SCAN_BARCODE -> scanBarcode(image)
+                            Constants.VALUE_LABEL_IMAGE -> labelImage(image)
+                        }
+                    } else {
+                        startActivity<RisActivity>(Constants.KEY_LABEL_FOR_RIS to risApiInput)
                     }
                 }
             }
@@ -145,6 +152,9 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
         detector.processImage(image)
                 .addOnSuccessListener { labels ->
                     updateUIForImageLabeling(labels)
+                    captureFab.setImageResource(R.drawable.ic_search_white_24dp)
+                    shouldCallRisApi = true
+                    risApiInput = labels[0].text
                 }
                 .addOnFailureListener { exception ->
                     Log.d("IMAGE_LABELLING", exception.toString())
@@ -226,6 +236,8 @@ class CameraActivity : AppCompatActivity(), CoroutineScope {
             saveToFirestoreFab.visibility = View.GONE
         }
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        shouldCallRisApi = false
+        risApiInput = ""
     }
 
     private fun showPreview(byteArray: ByteArray) {

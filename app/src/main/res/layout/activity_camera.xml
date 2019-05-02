@@ -27,8 +27,8 @@
                     android:keepScreenOn="true"
                     app:camera_facing="back"
                     app:camera_flash="auto"
-                    app:camera_imageJpegQuality="100"
                     app:camera_focus="continuous"
+                    app:camera_imageJpegQuality="100"
                     app:camera_imageMegaPixels="1.0"
                     app:camera_permissions="camera" />
 
@@ -91,7 +91,8 @@
             android:visibility="gone"
             app:fabSize="mini"
             app:layout_anchor="@id/relativeLayoutContainer"
-            app:layout_anchorGravity="end|bottom" />
+            app:layout_anchorGravity="end|bottom"
+            tools:visibility="visible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/saveToFirestoreFab"
@@ -103,7 +104,8 @@
             android:visibility="gone"
             app:fabSize="mini"
             app:layout_anchor="@id/relativeLayoutContainer"
-            app:layout_anchorGravity="start|bottom" />
+            app:layout_anchorGravity="start|bottom"
+            tools:visibility="visible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/captureFab"

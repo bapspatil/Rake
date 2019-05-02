@@ -3,18 +3,16 @@ package com.bapspatil.rake.model
 import com.google.gson.annotations.SerializedName
 
 data class RisOutputModel(
-        @SerializedName("best_guess")
-        var bestGuess: String?,
-        @SerializedName("descriptions")
-        var descriptions: ArrayList<String?>?,
+        @SerializedName("buy_link")
+        var buyLink: List<String?>?,
+        @SerializedName("images")
+        var images: List<String?>?,
         @SerializedName("links")
-        var links: ArrayList<String?>?,
+        var links: List<String?>?,
         @SerializedName("shop")
-        var shop: ArrayList<String?>?,
-        @SerializedName("similar_images")
-        var similarImages: ArrayList<String?>?,
+        var shop: List<String?>?,
         @SerializedName("sources")
-        var sources: ArrayList<String?>?,
+        var sources: List<String?>?,
         @SerializedName("titles")
-        var titles: ArrayList<String?>?
+        var titles: List<String?>?
 )

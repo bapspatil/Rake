@@ -11,6 +11,8 @@ class Constants {
         const val VALUE_SCAN_BARCODE = "VALUE_SCAN_BARCODE"
         const val VALUE_LABEL_IMAGE = "VALUE_LABEL_IMAGE"
 
+        const val KEY_LABEL_FOR_RIS = "KEY_LABEL_FOR_RIS"
+
         // App keys
         const val KEY_PREFERENCE_FIRST_LAUNCH = "KEY_PREFERENCE_FIRST_LAUNCH"
         const val KEY_CURRENT_USER_UID = "KEY_CURRENT_USER_UID"
